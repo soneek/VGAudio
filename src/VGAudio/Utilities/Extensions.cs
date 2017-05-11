@@ -6,7 +6,7 @@ using System.Text;
 
 namespace VGAudio.Utilities
 {
-    internal static class Extensions
+    public static class Extensions
     {
         public static IEnumerable<T[]> Batch<T>(this IEnumerable<T> source, int size, bool truncateLastBatch = false)
         {
