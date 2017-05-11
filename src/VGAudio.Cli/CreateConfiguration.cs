@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using VGAudio.Containers;
+using VGAudio.Containers.Adx;
 using VGAudio.Containers.Bxstm;
 using VGAudio.Containers.Dsp;
 using VGAudio.Containers.Idsp;
@@ -116,6 +117,11 @@ namespace VGAudio.Cli
             }
 
             return config;
+        }
+
+        public static IConfiguration Adx(Options options, IConfiguration inConfig = null)
+        {
+            return inConfig as AdxConfiguration ?? new AdxConfiguration();
         }
     }
 }
