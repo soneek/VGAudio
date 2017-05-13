@@ -36,7 +36,7 @@ namespace VGAudio.Formats
         public override CriAdxFormat EncodeFromPcm16(Pcm16Format pcm16)
         {
             var channels = new byte[pcm16.ChannelCount][];
-            int frameSize = 10;
+            int frameSize = 18;
 
             Parallel.For(0, pcm16.ChannelCount, i =>
             {
