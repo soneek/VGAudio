@@ -61,28 +61,34 @@ namespace VGAudio.Containers
 
         private static void ReadData(BinaryReader reader, AdxStructure structure)
         {
-            const ushort footerBytes = 0x8001;
+            int audioOffset = structure.CopyrightOffset + 4;
+            int footerOffset = FindFooter(reader, structure);
             int blockSize = structure.FrameSize * structure.ChannelCount;
-            int blockCount = 0;
+            int blockCount = (footerOffset - audioOffset) / blockSize;
 
-            int fileSize = (int)reader.BaseStream.Length;
-            int position = (int)reader.BaseStream.Position;
-
-            while (position < fileSize)
-            {
-                reader.BaseStream.Position = position;
-                ushort peek = reader.ReadUInt16();
-                if (peek == footerBytes)
-                {
-                    break;
-                }
-                blockCount++;
-                position += blockSize;
-            }
-
-            reader.BaseStream.Position = structure.CopyrightOffset + 4;
+            reader.BaseStream.Position = audioOffset;
             int dataLength = blockCount * blockSize;
             structure.AudioData = reader.BaseStream.DeInterleave(dataLength, structure.FrameSize, structure.ChannelCount);
+        }
+
+        public static int FindFooter(BinaryReader reader, AdxStructure structure)
+        {
+            const ushort footerSignature = 0x8001;
+            int fileSize = (int)reader.BaseStream.Length;
+            int audioStart = structure.CopyrightOffset + 4;
+            int frameSize = structure.FrameSize;
+
+            int position = GetNextMultiple(fileSize - audioStart, frameSize) + audioStart;
+
+            ushort peek;
+            do
+            {
+                position -= frameSize;
+                reader.BaseStream.Position = position;
+                peek = reader.ReadUInt16();
+            } while (peek != footerSignature && position > 0);
+
+            return position;
         }
     }
 }
