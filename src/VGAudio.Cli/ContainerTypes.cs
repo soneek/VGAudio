@@ -9,7 +9,7 @@ namespace VGAudio.Cli
     {
         public static readonly Dictionary<FileType, ContainerType> Containers = new Dictionary<FileType, ContainerType>
         {
-            [FileType.Wave] = new ContainerType(new[] { "wav", "wave" }, () => new WaveReader(), () => new WaveWriter(), CreateConfiguration.Wave),
+            [FileType.Wave] = new ContainerType(new[] { "wav", "wave", "lwav" }, () => new WaveReader(), () => new WaveWriter(), CreateConfiguration.Wave),
             [FileType.Dsp] = new ContainerType(new[] { "dsp" }, () => new DspReader(), () => new DspWriter(), CreateConfiguration.Dsp),
             [FileType.Idsp] = new ContainerType(new[] { "idsp" }, () => new IdspReader(), () => new IdspWriter(), CreateConfiguration.Idsp),
             [FileType.Brstm] = new ContainerType(new[] { "brstm" }, () => new BrstmReader(), () => new BrstmWriter(), CreateConfiguration.Brstm),
@@ -25,7 +25,7 @@ namespace VGAudio.Cli
 
     internal class ContainerType
     {
-        public ContainerType(IEnumerable<string> names, Func<IAudioReader> getReader, Func<IAudioWriter> getWriter, Func<Options, IConfiguration, IConfiguration> getConfiguration)
+        public ContainerType(IEnumerable<string> names, Func<IAudioReader> getReader, Func<IAudioWriter> getWriter, Func<Options, Configuration, Configuration> getConfiguration)
         {
             Names = names;
             GetReader = getReader;
@@ -36,6 +36,6 @@ namespace VGAudio.Cli
         public IEnumerable<string> Names { get; }
         public Func<IAudioReader> GetReader { get; }
         public Func<IAudioWriter> GetWriter { get; }
-        public Func<Options, IConfiguration, IConfiguration> GetConfiguration { get; }
+        public Func<Options, Configuration, Configuration> GetConfiguration { get; }
     }
 }
