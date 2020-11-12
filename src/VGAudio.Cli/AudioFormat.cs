@@ -11,6 +11,7 @@
         CriAdxFixed,
         CriAdxExp,
         CriHca,
-        Atrac9
+        Atrac9,
+        Opus
     }
 }
